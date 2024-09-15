@@ -104,6 +104,9 @@ function apply_postinstall_config() {
   # Set the Server Password
   "$EDIT_CONFIG" "$SERVER_CONFIG" "Password" "$SERVER_PASSWORD"
 
+  "$EDIT_CONFIG" "$SERVER_CONFIG" "MinutesPerPage" "0.1"
+  "$EDIT_CONFIG" "$SERVER_CONFIG" "MapRemotePlayerVisibility" "3"
+
   # Set the maximum amount of RAM for the JVM
   sed -i "s/-Xmx.*/-Xmx${MAX_RAM}\",/g" "${SERVER_VM_CONFIG}"
 
