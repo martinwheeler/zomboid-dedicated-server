@@ -20,16 +20,15 @@ name: Build and Test Server Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 defaults:
   run:
     shell: bash
 
 jobs:
-
   build-and-run:
     name: Build and Run Server
     runs-on: ubuntu-latest
@@ -63,7 +62,7 @@ jobs:
         run: |
           docker build \
           --file docker/zomboid-dedicated-server.Dockerfile \
-          --tag docker.io/renegademaster/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
+          --tag docker.io/martingwheeler/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
           .
 
       - name: Test Run the Docker Image
@@ -97,7 +96,7 @@ jobs:
             --env=SERVER_NAME="GitHubActionTest" \
             --env=SERVER_PASSWORD="github_action_test_password" \
             --env=UDP_PORT="25499" \
-            docker.io/renegademaster/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
+            docker.io/martingwheeler/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
             2>&1 | tee ./docker-log.log
 
       ###############################
@@ -150,7 +149,7 @@ jobs:
         run: |
           BUILDAH_LAYERS=true buildah bud \
           --file docker/zomboid-dedicated-server.Dockerfile \
-          --tag docker.io/renegademaster/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
+          --tag docker.io/martingwheeler/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
           .
 
       - name: Test Run the Podman Image
@@ -184,7 +183,7 @@ jobs:
             --env=SERVER_NAME="GitHubActionTest" \
             --env=SERVER_PASSWORD="github_action_test_password" \
             --env=UDP_PORT="25499" \
-            docker.io/renegademaster/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
+            docker.io/martingwheeler/zomboid-dedicated-server:${{ steps.variables.outputs.datetime }} \
             2>&1 | tee ./docker-log.log
 
       - name: Investigate File Structure
@@ -201,7 +200,7 @@ jobs:
 
       - name: Upload Docker Logs
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: docker-logs-${{ matrix.system }}
           path: |
@@ -209,7 +208,7 @@ jobs:
 
       - name: Upload Server Configuration
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: server-configs-${{ matrix.system }}
           path: |
